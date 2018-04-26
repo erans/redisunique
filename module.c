@@ -184,14 +184,16 @@ int RedisModule_OnLoad(RedisModuleCtx *ctx, RedisModuleString **argv, int argc) 
   long long snowflake_region_id = 1;
   long long snowflake_worker_id = 1;
 
-  if (RedisModule_StringToLongLong(argv[0], &snowflake_region_id) == REDISMODULE_ERR) {
-    RedisModule_Log(ctx, "info", "No region_id value set , using default value of 1");
-    snowflake_region_id = 1;
-  }
+  if (argc > 0) {
+    if (RedisModule_StringToLongLong(argv[0], &snowflake_region_id) == REDISMODULE_ERR) {
+      RedisModule_Log(ctx, "info", "No region_id value set , using default value of 1");
+      snowflake_region_id = 1;
+    }
 
-  if (RedisModule_StringToLongLong(argv[1], &snowflake_worker_id) == REDISMODULE_ERR) {
-    RedisModule_Log(ctx, "info", "No worker_id value set, using default value of 1");
-    snowflake_worker_id = 1;
+    if (RedisModule_StringToLongLong(argv[1], &snowflake_worker_id) == REDISMODULE_ERR) {
+      RedisModule_Log(ctx, "info", "No worker_id value set, using default value of 1");
+      snowflake_worker_id = 1;
+    }
   }
 
   RedisModule_Log(ctx, "info", "using snowflake region_id: %u  worker_id: %u", snowflake_region_id, snowflake_worker_id);
